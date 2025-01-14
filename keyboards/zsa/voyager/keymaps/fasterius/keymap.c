@@ -32,7 +32,8 @@ enum tap_dance_codes {
 #define RSFT_J MT(MOD_RSFT, KC_J)
 #define RGUI_K MT(MOD_RGUI, KC_K)
 #define RALT_L MT(MOD_RALT, KC_L)
-#define RCTL_COLN TD(DANCE_0)
+/*#define RCTL_COLN TD(DANCE_0)*/
+#define RCTL_COLN MT(MOD_RCTL, KC_COLN)
 #define L2_SPACE LT(2, KC_SPACE)
 #define MEH_TAB MEH_T(KC_TAB)
 #define MEH_BSPC MEH_T(KC_BSPC)
@@ -107,9 +108,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 };
 
+/*// Make [Shift + :] send [;] using key overrides*/
+/*const key_override_t semicolon_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_COLN, KC_SCLN);*/
+/*const key_override_t **key_overrides = (const key_override_t *[]){*/
+/*	&semicolon_key_override,*/
+/*	NULL // Null terminate the array of overrides!*/
+/*};*/
+
+// Custom shift key overrides
+#include "features/custom_shift_keys.h"
+const custom_shift_key_t custom_shift_keys[] = {
+  {MT(MOD_RCTL, KC_COLN), KC_SCLN}, // Shift : is ;
+};
+uint8_t NUM_CUSTOM_SHIFT_KEYS =
+    sizeof(custom_shift_keys) / sizeof(custom_shift_key_t);
+
+// Combos
 const uint16_t PROGMEM combo0[] = { KC_EQUAL, KC_MINUS, COMBO_END};
 const uint16_t PROGMEM combo1[] = { KC_G, KC_H, COMBO_END};
-
 combo_t key_combos[COMBO_COUNT] = {
     COMBO(combo0, TG(3)),
     COMBO(combo1, TG(4)),
@@ -192,6 +208,13 @@ bool rgb_matrix_indicators_user(void) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+
+  /*// Custom shift keys overrides*/
+  /*if (!process_custom_shift_keys(keycode, record)) {*/
+  /*  return false;*/
+  /*}*/
+
+  // Macros
   switch (keycode) {
     case CTL_SPC:
     if (record->event.pressed) {
@@ -221,18 +244,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             tap_code16(tap_hold->tap);
         }
         break;
+
     case RGB_SLD:
       if (record->event.pressed) {
         rgblight_mode(1);
       }
       return false;
+
   }
   return true;
 }
 
+// Tap dances
 void tap_dance_tap_hold_finished(tap_dance_state_t *state, void *user_data) {
     tap_dance_tap_hold_t *tap_hold = (tap_dance_tap_hold_t *)user_data;
-
     if (state->pressed) {
         if (state->count == 1
 #ifndef PERMISSIVE_HOLD
@@ -250,7 +275,6 @@ void tap_dance_tap_hold_finished(tap_dance_state_t *state, void *user_data) {
 
 void tap_dance_tap_hold_reset(tap_dance_state_t *state, void *user_data) {
     tap_dance_tap_hold_t *tap_hold = (tap_dance_tap_hold_t *)user_data;
-
     if (tap_hold->held) {
         unregister_code16(tap_hold->held);
         tap_hold->held = 0;
