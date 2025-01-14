@@ -12,16 +12,16 @@ enum custom_keycodes {
   MAC_ADIA,
 };
 
-typedef struct {
-    uint16_t tap;
-    uint16_t hold;
-    uint16_t held;
-} tap_dance_tap_hold_t;
-tap_dance_action_t *action;
+/*typedef struct {*/
+/*    uint16_t tap;*/
+/*    uint16_t hold;*/
+/*    uint16_t held;*/
+/*} tap_dance_tap_hold_t;*/
+/*tap_dance_action_t *action;*/
 
-enum tap_dance_codes {
-  DANCE_0,
-};
+/*enum tap_dance_codes {*/
+/*  DANCE_0,*/
+/*};*/
 
 // Define custom key names for layout readability
 // Main layer:
@@ -209,10 +209,10 @@ bool rgb_matrix_indicators_user(void) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
-  /*// Custom shift keys overrides*/
-  /*if (!process_custom_shift_keys(keycode, record)) {*/
-  /*  return false;*/
-  /*}*/
+  // Custom shift keys overrides
+  if (!process_custom_shift_keys(keycode, record)) {
+    return false;
+  }
 
   // Macros
   switch (keycode) {
@@ -237,13 +237,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
     break;
 
-    case TD(DANCE_0):
-        action = &tap_dance_actions[TD_INDEX(keycode)];
-        if (!record->event.pressed && action->state.count && !action->state.finished) {
-            tap_dance_tap_hold_t *tap_hold = (tap_dance_tap_hold_t *)action->user_data;
-            tap_code16(tap_hold->tap);
-        }
-        break;
+    /*case TD(DANCE_0):*/
+    /*    action = &tap_dance_actions[TD_INDEX(keycode)];*/
+    /*    if (!record->event.pressed && action->state.count && !action->state.finished) {*/
+    /*        tap_dance_tap_hold_t *tap_hold = (tap_dance_tap_hold_t *)action->user_data;*/
+    /*        tap_code16(tap_hold->tap);*/
+    /*    }*/
+    /*    break;*/
 
     case RGB_SLD:
       if (record->event.pressed) {
@@ -255,36 +255,32 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   return true;
 }
 
-// Tap dances
-void tap_dance_tap_hold_finished(tap_dance_state_t *state, void *user_data) {
-    tap_dance_tap_hold_t *tap_hold = (tap_dance_tap_hold_t *)user_data;
-    if (state->pressed) {
-        if (state->count == 1
-#ifndef PERMISSIVE_HOLD
-            && !state->interrupted
-#endif
-        ) {
-            register_code16(tap_hold->hold);
-            tap_hold->held = tap_hold->hold;
-        } else {
-            register_code16(tap_hold->tap);
-            tap_hold->held = tap_hold->tap;
-        }
-    }
-}
-
-void tap_dance_tap_hold_reset(tap_dance_state_t *state, void *user_data) {
-    tap_dance_tap_hold_t *tap_hold = (tap_dance_tap_hold_t *)user_data;
-    if (tap_hold->held) {
-        unregister_code16(tap_hold->held);
-        tap_hold->held = 0;
-    }
-}
-
-#define ACTION_TAP_DANCE_TAP_HOLD(tap, hold) \
-    { .fn = {NULL, tap_dance_tap_hold_finished, tap_dance_tap_hold_reset}, .user_data = (void *)&((tap_dance_tap_hold_t){tap, hold, 0}), }
-
-
-tap_dance_action_t tap_dance_actions[] = {
-        [DANCE_0] = ACTION_TAP_DANCE_TAP_HOLD(KC_COLN, KC_RIGHT_CTRL),
-};
+/*// Tap dances*/
+/*void tap_dance_tap_hold_finished(tap_dance_state_t *state, void *user_data) {*/
+/*    tap_dance_tap_hold_t *tap_hold = (tap_dance_tap_hold_t *)user_data;*/
+/*    if (state->pressed) {*/
+/*        if (state->count == 1*/
+/*#ifndef PERMISSIVE_HOLD*/
+/*            && !state->interrupted*/
+/*#endif*/
+/*        ) {*/
+/*            register_code16(tap_hold->hold);*/
+/*            tap_hold->held = tap_hold->hold;*/
+/*        } else {*/
+/*            register_code16(tap_hold->tap);*/
+/*            tap_hold->held = tap_hold->tap;*/
+/*        }*/
+/*    }*/
+/*}*/
+/*void tap_dance_tap_hold_reset(tap_dance_state_t *state, void *user_data) {*/
+/*    tap_dance_tap_hold_t *tap_hold = (tap_dance_tap_hold_t *)user_data;*/
+/*    if (tap_hold->held) {*/
+/*        unregister_code16(tap_hold->held);*/
+/*        tap_hold->held = 0;*/
+/*    }*/
+/*}*/
+/*#define ACTION_TAP_DANCE_TAP_HOLD(tap, hold) \*/
+/*    { .fn = {NULL, tap_dance_tap_hold_finished, tap_dance_tap_hold_reset}, .user_data = (void *)&((tap_dance_tap_hold_t){tap, hold, 0}), }*/
+/*tap_dance_action_t tap_dance_actions[] = {*/
+/*        [DANCE_0] = ACTION_TAP_DANCE_TAP_HOLD(KC_COLN, KC_RIGHT_CTRL),*/
+/*};*/
