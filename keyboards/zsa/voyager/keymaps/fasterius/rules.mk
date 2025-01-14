@@ -9,7 +9,7 @@ MOUSEKEY_ENABLE = no
 ORYX_ENABLE = yes
 RGB_MATRIX_CUSTOM_KB = yes
 SPACE_CADET_ENABLE = no
-TAP_DANCE_ENABLE = yes
+# TAP_DANCE_ENABLE = no
 
 # Custom shift key overrides
 SRC += features/custom_shift_keys.c
