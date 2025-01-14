@@ -130,3 +130,7 @@ via*.json
 !/keyboards/zsa/**/keymaps/default/**
 !/keyboards/zsa/**/keymaps/oryx
 !/keyboards/zsa/**/keymaps/oryx/**
+
+# Personal keymaps
+!/keyboards/zsa/**/keymaps/fasterius
+!/keyboards/zsa/**/keymaps/fasterius/**
