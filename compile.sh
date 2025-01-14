@@ -1,5 +1,8 @@
 #!/bin/bash
 
+KEYBOARD="zsa/voyager"
+KEYMAP="fasterius"
+
 # Build Docker image
 docker build \
     --rm \
@@ -13,6 +16,6 @@ if [ $? == "0" ]; then
         --rm \
         -v "${PWD}:/work" \
         erikfas/qmk-firmware-zsa \
-        qmk compile -kb voyager -km fasterius
+        qmk compile -kb $KEYBOARD -km $KEYMAP
 
 fi
