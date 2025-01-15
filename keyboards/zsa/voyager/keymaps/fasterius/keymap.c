@@ -12,19 +12,7 @@ enum custom_keycodes {
   MAC_ADIA,
 };
 
-/*typedef struct {*/
-/*    uint16_t tap;*/
-/*    uint16_t hold;*/
-/*    uint16_t held;*/
-/*} tap_dance_tap_hold_t;*/
-/*tap_dance_action_t *action;*/
-
-/*enum tap_dance_codes {*/
-/*  DANCE_0,*/
-/*};*/
-
-// Define custom key names for layout readability
-// Main layer:
+// Main layer custom keycodes
 #define LCTL_A MT(MOD_LCTL, KC_A)
 #define LALT_S MT(MOD_LALT, KC_S)
 #define LGUI_D MT(MOD_LGUI, KC_D)
@@ -32,13 +20,13 @@ enum custom_keycodes {
 #define RSFT_J MT(MOD_RSFT, KC_J)
 #define RGUI_K MT(MOD_RGUI, KC_K)
 #define RALT_L MT(MOD_RALT, KC_L)
-/*#define RCTL_COLN TD(DANCE_0)*/
-#define RCTL_COLN MT(MOD_RCTL, KC_COLN)
+#define RCTL_COLN MT(MOD_RCTL, KC_0) // KC_0 is a placeholder
 #define L2_SPACE LT(2, KC_SPACE)
 #define MEH_TAB MEH_T(KC_TAB)
 #define MEH_BSPC MEH_T(KC_BSPC)
 #define L1_ENTER LT(1, KC_ENTER)
-// Navigation / media / macro layer
+
+// Navigation / media / macro layer custom keycodes
 #define VOL_UP KC_AUDIO_VOL_UP
 #define VOL_DOWN KC_AUDIO_VOL_DOWN
 #define MUTE KC_AUDIO_MUTE
@@ -53,12 +41,14 @@ enum custom_keycodes {
 #define CUT LGUI(KC_X)
 #define COPY LGUI(KC_C)
 #define PASTE LGUI(KC_V)
-// Gaming layer
+
+// Gaming layer custom keycodes
 #define ALT_TAB MT(MOD_LALT, KC_TAB)
-// Swedish layer
+
+// Swedish layer custom keycodes
 #define RCTL_OSLH MT(MOD_RCTL, MAC_OSLH)
 
-// Layout
+// Keymap
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   // Main layer
@@ -108,29 +98,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 };
 
-/*// Make [Shift + :] send [;] using key overrides*/
-/*const key_override_t semicolon_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_COLN, KC_SCLN);*/
-/*const key_override_t **key_overrides = (const key_override_t *[]){*/
-/*	&semicolon_key_override,*/
-/*	NULL // Null terminate the array of overrides!*/
-/*};*/
-
-// Custom shift key overrides
-#include "features/custom_shift_keys.h"
-const custom_shift_key_t custom_shift_keys[] = {
-  {MT(MOD_RCTL, KC_COLN), KC_SCLN}, // Shift : is ;
-};
-uint8_t NUM_CUSTOM_SHIFT_KEYS =
-    sizeof(custom_shift_keys) / sizeof(custom_shift_key_t);
-
 // Combos
 const uint16_t PROGMEM combo0[] = { KC_EQUAL, KC_MINUS, COMBO_END};
 const uint16_t PROGMEM combo1[] = { KC_G, KC_H, COMBO_END};
 combo_t key_combos[COMBO_COUNT] = {
-    COMBO(combo0, TG(3)),
-    COMBO(combo1, TG(4)),
+    COMBO(combo0, TG(3)), // Toggle gaming layer
+    COMBO(combo1, TG(4)), // Toggle Swedish layer
 };
 
+// Key-specific tapping terms
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case MEH_T(KC_TAB):
@@ -142,6 +118,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     }
 }
 
+// RGB colours
 extern rgb_config_t rgb_matrix_config;
 
 void keyboard_post_init_user(void) {
@@ -209,13 +186,13 @@ bool rgb_matrix_indicators_user(void) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
-  // Custom shift keys overrides
-  if (!process_custom_shift_keys(keycode, record)) {
-    return false;
-  }
+  // Save modifiers and check if Shift is held (for RCTL_COLN)
+  const uint8_t saved_mods = get_mods();
+  const bool shifted = (saved_mods | get_oneshot_mods()) & MOD_MASK_SHIFT;
 
-  // Macros
   switch (keycode) {
+
+    // Macros
     case CTL_SPC:
     if (record->event.pressed) {
       SEND_STRING(SS_LCTL(SS_TAP(X_SPACE)));
@@ -237,14 +214,23 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
     break;
 
-    /*case TD(DANCE_0):*/
-    /*    action = &tap_dance_actions[TD_INDEX(keycode)];*/
-    /*    if (!record->event.pressed && action->state.count && !action->state.finished) {*/
-    /*        tap_dance_tap_hold_t *tap_hold = (tap_dance_tap_hold_t *)action->user_data;*/
-    /*        tap_code16(tap_hold->tap);*/
-    /*    }*/
-    /*    break;*/
+    // RCTL_COLN: RCTL on hold, COLN (:) on tap and SCLN (;) on shifted tap
+    case RCTL_COLN:
+      if (record->tap.count) {  // On tap
+        if (record->event.pressed) {  // On press
+          // Clear Shift from modifiers so that the correct keycode can be sent
+          del_oneshot_mods(MOD_MASK_SHIFT);
+          unregister_mods(MOD_MASK_SHIFT);
+          // Tap the applicable key depending on Shift status
+          tap_code16(shifted ? KC_SCLN : KC_COLN);
+          // Restore the saved mods
+          set_mods(saved_mods);
+        }
+        return false;  // Skip default handling for KC_0 on tap
+      }
+      break;  // Continue default handling for Ctrl on hold
 
+    // Toggle LED lighting
     case RGB_SLD:
       if (record->event.pressed) {
         rgblight_mode(1);
@@ -254,33 +240,3 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   }
   return true;
 }
-
-/*// Tap dances*/
-/*void tap_dance_tap_hold_finished(tap_dance_state_t *state, void *user_data) {*/
-/*    tap_dance_tap_hold_t *tap_hold = (tap_dance_tap_hold_t *)user_data;*/
-/*    if (state->pressed) {*/
-/*        if (state->count == 1*/
-/*#ifndef PERMISSIVE_HOLD*/
-/*            && !state->interrupted*/
-/*#endif*/
-/*        ) {*/
-/*            register_code16(tap_hold->hold);*/
-/*            tap_hold->held = tap_hold->hold;*/
-/*        } else {*/
-/*            register_code16(tap_hold->tap);*/
-/*            tap_hold->held = tap_hold->tap;*/
-/*        }*/
-/*    }*/
-/*}*/
-/*void tap_dance_tap_hold_reset(tap_dance_state_t *state, void *user_data) {*/
-/*    tap_dance_tap_hold_t *tap_hold = (tap_dance_tap_hold_t *)user_data;*/
-/*    if (tap_hold->held) {*/
-/*        unregister_code16(tap_hold->held);*/
-/*        tap_hold->held = 0;*/
-/*    }*/
-/*}*/
-/*#define ACTION_TAP_DANCE_TAP_HOLD(tap, hold) \*/
-/*    { .fn = {NULL, tap_dance_tap_hold_finished, tap_dance_tap_hold_reset}, .user_data = (void *)&((tap_dance_tap_hold_t){tap, hold, 0}), }*/
-/*tap_dance_action_t tap_dance_actions[] = {*/
-/*        [DANCE_0] = ACTION_TAP_DANCE_TAP_HOLD(KC_COLN, KC_RIGHT_CTRL),*/
-/*};*/
