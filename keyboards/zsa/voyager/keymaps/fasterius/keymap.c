@@ -6,6 +6,7 @@
 #define MOON_LED_LEVEL LED_LEVEL
 #define ML_SAFE_RANGE SAFE_RANGE
 
+// Macros
 enum custom_keycodes {
   CTL_SPC = ML_SAFE_RANGE,
   MAC_AA,
@@ -47,7 +48,7 @@ enum custom_keycodes {
 #define ALT_TAB MT(MOD_LALT, KC_TAB)
 
 // Swedish layer aliases
-#define RCTL_OSLH MT(MOD_RCTL, MAC_OSLH)
+#define RCTL_OSLH MT(MOD_RCTL, SE_OSLH)
 
 // Keymap
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
