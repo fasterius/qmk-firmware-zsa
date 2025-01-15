@@ -73,7 +73,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_SYMBOLS] = LAYOUT_voyager(
     _______  , KC_F1    , KC_F2    , KC_F3    , KC_F4    , KC_F5    ,           KC_F6    , KC_F7    , KC_F8    , KC_F9    , KC_F10   , _______  ,
     _______  , XXXXXXX  , XXXXXXX  , KC_PLUS  , KC_LBRC  , KC_RBRC  ,           XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , _______  ,
-    _______  , KC_EQUAL , KC_UNDS  , KC_MINUS , KC_LPRN  , KC_RPRN  ,           XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , KC_SCLN  , _______  ,
+    _______  , KC_EQUAL , KC_UNDS  , KC_MINUS , KC_LPRN  , KC_RPRN  ,           XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , _______  ,
     _______  , XXXXXXX  , KC_TILD  , KC_GRAVE , KC_LCBR  , KC_RCBR  ,           XXXXXXX  , XXXXXXX  , _______  , _______  , _______  , _______  ,
                                                 _______  , _______  ,           _______  , _______
   ),
