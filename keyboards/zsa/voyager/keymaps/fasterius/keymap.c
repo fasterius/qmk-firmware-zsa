@@ -12,7 +12,26 @@ enum custom_keycodes {
   MAC_AA,
   MAC_OSLH,
   MAC_ADIA,
+  SEL_ALL,
+  REDO,
+  UNDO,
+  CUT,
+  COPY,
+  PASTE,
 };
+
+// Aliases needed for OS-aware macros
+#define GENERAL_MODIFIER_KEY_DELAY_MS 20
+#define GENERAL_KEY_ACTION_DELAY_MS 50
+#define KEY_MODIFIER_ACTION(keycode, modifier) \
+    SS_DOWN(modifier) \
+    SS_DELAY(GENERAL_MODIFIER_KEY_DELAY_MS) \
+    SS_TAP(keycode) \
+    SS_DELAY(GENERAL_KEY_ACTION_DELAY_MS) \
+    SS_UP(modifier) \
+    SS_DELAY(GENERAL_MODIFIER_KEY_DELAY_MS)
+#define KEY_LGUI_ACTION(keycode) KEY_MODIFIER_ACTION(keycode, X_LGUI)
+#define KEY_LCTL_ACTION(keycode) KEY_MODIFIER_ACTION(keycode, X_LCTL)
 
 // Main layer aliases
 #define LCTL_A MT(MOD_LCTL, KC_A)
@@ -37,12 +56,6 @@ enum custom_keycodes {
 #define LALT_PREV MT(MOD_LALT, KC_MEDIA_PREV_TRACK)
 #define LGUI_NEXT MT(MOD_LGUI, KC_MEDIA_NEXT_TRACK)
 #define LSFT_PLAY MT(MOD_LSFT, KC_MEDIA_PLAY_PAUSE)
-#define SEL_ALL LGUI(KC_A)
-#define REDO LGUI(LSFT(KC_Z))
-#define UNDO LGUI(KC_Z)
-#define CUT LGUI(KC_X)
-#define COPY LGUI(KC_C)
-#define PASTE LGUI(KC_V)
 
 // Gaming layer aliases
 #define ALT_TAB MT(MOD_LALT, KC_TAB)
@@ -192,7 +205,10 @@ bool rgb_matrix_indicators_user(void) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
-  // Save modifiers and check if Shift is held (for RCTL_COLN)
+  // Save detected OS for OS-specific macros
+  os_variant_t current_os = detected_host_os();
+
+  // Save modifiers and check if Shift is held for RCTL_COLN
   const uint8_t saved_mods = get_mods();
   const bool shifted = (saved_mods | get_oneshot_mods()) & MOD_MASK_SHIFT;
 
@@ -219,6 +235,69 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       SEND_STRING(SS_LALT(SS_TAP(X_U)) SS_DELAY(100) SS_TAP(X_O));
     }
     break;
+
+    // OS-specific macros
+    case SEL_ALL:
+      if (record->event.pressed) {
+        if (current_os == OS_MACOS || current_os == OS_IOS) {
+          SEND_STRING(KEY_LGUI_ACTION(X_A));
+        }
+        else {
+          SEND_STRING(KEY_LCTL_ACTION(X_A));
+        }
+      }
+      break;
+    /*case REDO:*/
+    /*  if (record->event.pressed) {*/
+    /*    os_variant_t current_os = detected_host_os();*/
+    /*    if (current_os == OS_MACOS || current_os == OS_IOS) {*/
+    /*      SEND_STRING(KEY_LGUI_ACTION(X_Z));*/
+    /*    }*/
+    /*    else {*/
+    /*      SEND_STRING(KEY_LCTL_ACTION(X_Z));*/
+    /*    }*/
+    /*  }*/
+      break;
+    case UNDO:
+      if (record->event.pressed) {
+        if (current_os == OS_MACOS || current_os == OS_IOS) {
+          SEND_STRING(KEY_LGUI_ACTION(X_Z));
+        }
+        else {
+          SEND_STRING(KEY_LCTL_ACTION(X_Z));
+        }
+      }
+      break;
+    case CUT:
+      if (record->event.pressed) {
+        if (current_os == OS_MACOS || current_os == OS_IOS) {
+          SEND_STRING(KEY_LGUI_ACTION(X_X));
+        }
+        else {
+          SEND_STRING(KEY_LCTL_ACTION(X_X));
+        }
+      }
+      break;
+    case COPY:
+      if (record->event.pressed) {
+        if (current_os == OS_MACOS || current_os == OS_IOS) {
+          SEND_STRING(KEY_LGUI_ACTION(X_C));
+        }
+        else {
+          SEND_STRING(KEY_LCTL_ACTION(X_C));
+        }
+      }
+      break;
+    case PASTE:
+      if (record->event.pressed) {
+        if (current_os == OS_MACOS || current_os == OS_IOS) {
+          SEND_STRING(KEY_LGUI_ACTION(X_V));
+        }
+        else {
+          SEND_STRING(KEY_LCTL_ACTION(X_V));
+        }
+      }
+      break;
 
     // RCTL_COLN: RCTL on hold, COLN (:) on tap and SCLN (;) on shifted tap
     case RCTL_COLN:
