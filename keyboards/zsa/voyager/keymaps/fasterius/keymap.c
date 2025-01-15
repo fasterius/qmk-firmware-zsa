@@ -1,6 +1,8 @@
 #include QMK_KEYBOARD_H
 #include "version.h"
 #include "i18n.h"
+
+// QMK custom keycodes
 #define MOON_LED_LEVEL LED_LEVEL
 #define ML_SAFE_RANGE SAFE_RANGE
 
@@ -11,7 +13,7 @@ enum custom_keycodes {
   MAC_ADIA,
 };
 
-// Main layer custom keycodes
+// Main layer aliases
 #define LCTL_A MT(MOD_LCTL, KC_A)
 #define LALT_S MT(MOD_LALT, KC_S)
 #define LGUI_D MT(MOD_LGUI, KC_D)
@@ -25,7 +27,7 @@ enum custom_keycodes {
 #define MEH_BSPC MEH_T(KC_BSPC)
 #define L1_ENTER LT(1, KC_ENTER)
 
-// Navigation / media / macro layer custom keycodes
+// Navigation / media / macro layer aliases
 #define VOL_UP KC_AUDIO_VOL_UP
 #define VOL_DOWN KC_AUDIO_VOL_DOWN
 #define MUTE KC_AUDIO_MUTE
@@ -41,10 +43,10 @@ enum custom_keycodes {
 #define COPY LGUI(KC_C)
 #define PASTE LGUI(KC_V)
 
-// Gaming layer custom keycodes
+// Gaming layer aliases
 #define ALT_TAB MT(MOD_LALT, KC_TAB)
 
-// Swedish layer custom keycodes
+// Swedish layer aliases
 #define RCTL_OSLH MT(MOD_RCTL, MAC_OSLH)
 
 // Keymap
@@ -62,18 +64,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // Symbols layer
   [1] = LAYOUT_voyager(
     _______  , KC_F1    , KC_F2    , KC_F3    , KC_F4    , KC_F5    ,           KC_F6    , KC_F7    , KC_F8    , KC_F9    , KC_F10   , _______  ,
-    _______  , KC_NO    , KC_NO    , KC_PLUS  , KC_LBRC  , KC_RBRC  ,           KC_NO    , KC_NO    , KC_NO    , KC_NO    , KC_NO    , _______  ,
-    _______  , KC_EQUAL , KC_UNDS  , KC_MINUS , KC_LPRN  , KC_RPRN  ,           KC_NO    , KC_NO    , KC_NO    , KC_NO    , KC_SCLN  , _______  ,
-    _______  , KC_NO    , KC_TILD  , KC_GRAVE , KC_LCBR  , KC_RCBR  ,           KC_NO    , KC_NO    , _______  , _______  , _______  , _______  ,
+    _______  , XXXXXXX  , XXXXXXX  , KC_PLUS  , KC_LBRC  , KC_RBRC  ,           XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , _______  ,
+    _______  , KC_EQUAL , KC_UNDS  , KC_MINUS , KC_LPRN  , KC_RPRN  ,           XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , KC_SCLN  , _______  ,
+    _______  , XXXXXXX  , KC_TILD  , KC_GRAVE , KC_LCBR  , KC_RCBR  ,           XXXXXXX  , XXXXXXX  , _______  , _______  , _______  , _______  ,
                                                 _______  , _______  ,           _______  , _______
   ),
 
   // Navigation / media / macro layer
   [2] = LAYOUT_voyager(
-    KC_NO    , LED_LEVEL, RGB_VAD  , RGB_VAI  , RGB_TOG  , KC_NO    ,           KC_NO    , KC_NO    , KC_NO   , KC_NO    , KC_NO     , QK_BOOT  ,
-    KC_NO    , KC_NO    , VOL_DOWN , VOL_UP   , MUTE     , KC_NO    ,           KC_HOME  , KC_PGDN  , PAGE_UP , KC_END   , KC_NO     , MAC_AA   ,
-    SEL_ALL  , LCTL_STOP, LALT_PREV, LGUI_NEXT, LSFT_PLAY, CTL_SPC  ,           KC_LEFT  , KC_DOWN  , KC_UP   , KC_RIGHT , MAC_OSLH  , MAC_ADIA ,
-    REDO     , UNDO     , CUT      , COPY     , PASTE    , KC_F19   ,           KC_NO    , KC_NO    , KC_NO   , KC_NO    , KC_NO     , KC_NO    ,
+    XXXXXXX  , LED_LEVEL, RGB_VAD  , RGB_VAI  , RGB_TOG  , XXXXXXX  ,           XXXXXXX  , XXXXXXX  , XXXXXXX   , XXXXXXX  , XXXXXXX   , QK_BOOT  ,
+    XXXXXXX  , XXXXXXX  , VOL_DOWN , VOL_UP   , MUTE     , XXXXXXX  ,           KC_HOME  , KC_PGDN  , PAGE_UP   , KC_END   , XXXXXXX   , MAC_AA   ,
+    SEL_ALL  , LCTL_STOP, LALT_PREV, LGUI_NEXT, LSFT_PLAY, CTL_SPC  ,           KC_LEFT  , KC_DOWN  , KC_UP     , KC_RIGHT , MAC_OSLH  , MAC_ADIA ,
+    REDO     , UNDO     , CUT      , COPY     , PASTE    , KC_F19   ,           XXXXXXX  , XXXXXXX  , XXXXXXX   , XXXXXXX  , XXXXXXX   , XXXXXXX  ,
                                                 _______  , _______  ,           _______  , _______
   ),
 
