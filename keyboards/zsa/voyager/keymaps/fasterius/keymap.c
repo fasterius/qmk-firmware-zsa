@@ -199,24 +199,24 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
 
     // Macros
-    case CTL_SPC:
+    case CTL_SPC: // Ctrl + Space to switch input language on MacOS
     if (record->event.pressed) {
       SEND_STRING(SS_LCTL(SS_TAP(X_SPACE)));
     }
     break;
-    case MAC_AA:
+    case MAC_AA: // Type `å` on MacOS
     if (record->event.pressed) {
       SEND_STRING(SS_LALT(SS_TAP(X_A)));
     }
     break;
-    case MAC_OSLH:
-    if (record->event.pressed) {
-      SEND_STRING(SS_LALT(SS_TAP(X_U)) SS_DELAY(100) SS_TAP(X_O));
-    }
-    break;
-    case MAC_ADIA:
+    case MAC_ADIA: // Type `ä` on MacOS
     if (record->event.pressed) {
       SEND_STRING(SS_LALT(SS_TAP(X_U)) SS_DELAY(100) SS_TAP(X_A));
+    }
+    break;
+    case MAC_OSLH: // Type `ö` on MacOS
+    if (record->event.pressed) {
+      SEND_STRING(SS_LALT(SS_TAP(X_U)) SS_DELAY(100) SS_TAP(X_O));
     }
     break;
 
