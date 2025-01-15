@@ -50,11 +50,19 @@ enum custom_keycodes {
 // Swedish layer aliases
 #define RCTL_OSLH MT(MOD_RCTL, SE_OSLH)
 
+// Define custom layer names
+enum custom_layers {
+    _MAIN,
+    _SYMBOLS,
+    _NAVIGATION,
+    _GAMING,
+    _SWEDISH,
+};
+
 // Keymap
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
-  // Main layer
-  [0] = LAYOUT_voyager(
+  [_MAIN] = LAYOUT_voyager(
     KC_EQUAL , KC_1     , KC_2     , KC_3     , KC_4     , KC_5     ,           KC_6     , KC_7     , KC_8     , KC_9     , KC_0     , KC_MINUS ,
     KC_DEL   , KC_Q     , KC_W     , KC_E     , KC_R     , KC_T     ,           KC_Y     , KC_U     , KC_I     , KC_O     , KC_P     , KC_BSLS  ,
     KC_ESC   , LCTL_A   , LALT_S   , LGUI_D   , LSFT_F   , KC_G     ,           KC_H     , RSFT_J   , RGUI_K   , RALT_L   , RCTL_COLN, KC_QUOTE ,
@@ -62,8 +70,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                L2_SPACE  , MEH_TAB  ,           MEH_BSPC , L1_ENTER
   ),
 
-  // Symbols layer
-  [1] = LAYOUT_voyager(
+  [_SYMBOLS] = LAYOUT_voyager(
     _______  , KC_F1    , KC_F2    , KC_F3    , KC_F4    , KC_F5    ,           KC_F6    , KC_F7    , KC_F8    , KC_F9    , KC_F10   , _______  ,
     _______  , XXXXXXX  , XXXXXXX  , KC_PLUS  , KC_LBRC  , KC_RBRC  ,           XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , _______  ,
     _______  , KC_EQUAL , KC_UNDS  , KC_MINUS , KC_LPRN  , KC_RPRN  ,           XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , KC_SCLN  , _______  ,
@@ -71,8 +78,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                 _______  , _______  ,           _______  , _______
   ),
 
-  // Navigation / media / macro layer
-  [2] = LAYOUT_voyager(
+  [_NAVIGATION] = LAYOUT_voyager(
     XXXXXXX  , LED_LEVEL, RGB_VAD  , RGB_VAI  , RGB_TOG  , XXXXXXX  ,           XXXXXXX  , XXXXXXX  , XXXXXXX   , XXXXXXX  , XXXXXXX   , QK_BOOT  ,
     XXXXXXX  , XXXXXXX  , VOL_DOWN , VOL_UP   , MUTE     , XXXXXXX  ,           KC_HOME  , KC_PGDN  , PAGE_UP   , KC_END   , XXXXXXX   , MAC_AA   ,
     SEL_ALL  , LCTL_STOP, LALT_PREV, LGUI_NEXT, LSFT_PLAY, CTL_SPC  ,           KC_LEFT  , KC_DOWN  , KC_UP     , KC_RIGHT , MAC_OSLH  , MAC_ADIA ,
@@ -80,8 +86,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                 _______  , _______  ,           _______  , _______
   ),
 
-  // Gaming layer
-  [3] = LAYOUT_voyager(
+  [_GAMING] = LAYOUT_voyager(
     _______  , _______  , _______  , _______  , _______  , _______  ,           _______  , _______  , _______  , _______  , _______  , _______  ,
     KC_LSFT  , _______  , _______  , _______  , _______  , _______  ,           _______  , _______  , _______  , _______  , _______  , _______  ,
     KC_ESC   , KC_A     , KC_S     , KC_D     , KC_F     , _______  ,           _______  , _______  , _______  , _______  , _______  , _______  ,
@@ -89,8 +94,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                 _______  , ALT_TAB  ,           _______  , _______
   ),
 
-  // Swedish layer
-  [4] = LAYOUT_voyager(
+  [_SWEDISH] = LAYOUT_voyager(
     _______  , _______  , _______  , _______  , _______  , _______  ,           _______  , _______  , _______  , _______  , _______  , _______  ,
     _______  , _______  , _______  , _______  , _______  , _______  ,           _______  , _______  , _______  , _______  , _______  , SE_AA    ,
     _______  , _______  , _______  , _______  , _______  , _______  ,           _______  , _______  , _______  , _______  , RCTL_OSLH, SE_ADIA  ,
