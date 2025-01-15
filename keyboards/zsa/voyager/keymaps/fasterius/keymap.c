@@ -5,8 +5,7 @@
 #define ML_SAFE_RANGE SAFE_RANGE
 
 enum custom_keycodes {
-  RGB_SLD = ML_SAFE_RANGE,
-  CTL_SPC,
+  CTL_SPC = ML_SAFE_RANGE,
   MAC_AA,
   MAC_OSLH,
   MAC_ADIA,
@@ -229,13 +228,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         return false;  // Skip default handling for KC_0 on tap
       }
       break;  // Continue default handling for Ctrl on hold
-
-    // Toggle LED lighting
-    case RGB_SLD:
-      if (record->event.pressed) {
-        rgblight_mode(1);
-      }
-      return false;
 
   }
   return true;
