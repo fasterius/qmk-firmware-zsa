@@ -3,20 +3,21 @@
 # Edit these values (as applicable)
 KEYBOARD="zsa/voyager"
 KEYMAP="fasterius"
+IMAGE="erikfas/qmk-firmware-zsa"
 
 # Build Docker image
 docker build \
     --rm \
-    -t erikfas/qmk-firmware-zsa \
+    -t "${IMAGE}" \
     .
 
-# Compile keymap
+# Compile keymap if build was successful
 if [ $? == "0" ]; then
 
     docker run \
         --rm \
         -v "${PWD}:/work" \
-        erikfas/qmk-firmware-zsa \
-        qmk compile -kb $KEYBOARD -km $KEYMAP
+        "${IMAGE}" \
+        qmk compile -kb ${KEYBOARD} -km ${KEYMAP}
 
 fi
