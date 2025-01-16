@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Edit these values (as applicable)
 KEYBOARD="zsa/voyager"
 KEYMAP="fasterius"
 
