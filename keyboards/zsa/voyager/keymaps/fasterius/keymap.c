@@ -45,12 +45,12 @@ enum custom_layers {
 #define LGUI_D MT(MOD_LGUI, KC_D)
 #define LSFT_F MT(MOD_LSFT, KC_F)
 #define RSFT_J MT(MOD_RSFT, KC_J)
-#define RGUI_K MT(MOD_RGUI, KC_K)
+#define LGUI_K MT(MOD_LGUI, KC_K) // RGUI is used by `rcmd` software
 #define RALT_L MT(MOD_RALT, KC_L)
 #define RCTL_COLN MT(MOD_RCTL, KC_0) // KC_0 is a placeholder
 #define NAV_SPACE LT(_NAVIGATION, KC_SPACE)
-#define MEH_TAB MEH_T(KC_TAB)
-#define MEH_BSPC MEH_T(KC_BSPC)
+#define RGUI_TAB MT(MOD_RGUI, KC_TAB)
+#define RGUI_BSPC MT(MOD_RGUI, KC_BSPC)
 #define SYM_ENTER LT(_SYMBOLS, KC_ENTER)
 
 // Navigation / media / macro layer aliases
@@ -76,9 +76,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_MAIN] = LAYOUT_voyager(
     KC_EQUAL , KC_1     , KC_2     , KC_3     , KC_4     , KC_5     ,           KC_6     , KC_7     , KC_8     , KC_9     , KC_0     , KC_MINUS ,
     KC_DEL   , KC_Q     , KC_W     , KC_E     , KC_R     , KC_T     ,           KC_Y     , KC_U     , KC_I     , KC_O     , KC_P     , KC_BSLS  ,
-    KC_ESC   , LCTL_A   , LALT_S   , LGUI_D   , LSFT_F   , KC_G     ,           KC_H     , RSFT_J   , RGUI_K   , RALT_L   , RCTL_COLN, KC_QUOTE ,
+    KC_ESC   , LCTL_A   , LALT_S   , LGUI_D   , LSFT_F   , KC_G     ,           KC_H     , RSFT_J   , LGUI_K   , RALT_L   , RCTL_COLN, KC_QUOTE ,
     KC_CAPS  , KC_Z     , KC_X     , KC_C     , KC_V     , KC_B     ,           KC_N     , KC_M     , KC_COMMA , KC_DOT   , KC_SLASH , CW_TOGG  ,
-                                               NAV_SPACE , MEH_TAB  ,           MEH_BSPC , SYM_ENTER
+                                               NAV_SPACE , RGUI_TAB ,           RGUI_BSPC, SYM_ENTER
   ),
 
   [_SYMBOLS] = LAYOUT_voyager(
@@ -126,9 +126,9 @@ combo_t key_combos[COMBO_COUNT] = {
 // Key-specific tapping terms
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case MEH_T(KC_TAB):
+        case RGUI_TAB:
             return TAPPING_TERM -50;
-        case MEH_T(KC_BSPC):
+        case RGUI_BSPC:
             return TAPPING_TERM -50;
         default:
             return TAPPING_TERM;
