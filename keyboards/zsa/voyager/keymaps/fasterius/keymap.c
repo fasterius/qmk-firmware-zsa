@@ -38,6 +38,14 @@ enum custom_layers {
     SS_UP(modifier) SS_DELAY(GENERAL_MODIFIER_KEY_DELAY_MS)
 #define KEY_LGUI_ACTION(keycode) KEY_MODIFIER_ACTION(keycode, X_LGUI)
 #define KEY_LCTL_ACTION(keycode) KEY_MODIFIER_ACTION(keycode, X_LCTL)
+#define KEY_SHIFT_LGUI_ACTION(keycode) \
+    SS_DOWN(X_LSFT) SS_DELAY(GENERAL_MODIFIER_KEY_DELAY_MS) \
+    KEY_LGUI_ACTION(keycode) \
+    SS_UP(X_LSFT) SS_DELAY(GENERAL_MODIFIER_KEY_DELAY_MS)
+#define KEY_SHIFT_LCTL_ACTION(keycode) \
+    SS_DOWN(X_LSFT) SS_DELAY(GENERAL_MODIFIER_KEY_DELAY_MS) \
+    KEY_LCTL_ACTION(keycode) \
+    SS_UP(X_LSFT) SS_DELAY(GENERAL_MODIFIER_KEY_DELAY_MS)
 
 // Main layer aliases
 #define LCTL_A MT(MOD_LCTL, KC_A)
@@ -297,16 +305,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       break;
 
-    /*case REDO:*/
-    /*  if (record->event.pressed) {*/
-    /*    if (current_os == OS_MACOS || current_os == OS_IOS) {*/
-    /*      SEND_STRING(KEY_LGUI_ACTION(X_Z));*/
-    /*    }*/
-    /*    else {*/
-    /*      SEND_STRING(KEY_LCTL_ACTION(X_Z));*/
-    /*    }*/
-    /*  }*/
-    /*  break;*/
+    case REDO:
+      if (record->event.pressed) {
+        if (current_os == OS_MACOS || current_os == OS_IOS) {
+          SEND_STRING(KEY_SHIFT_LGUI_ACTION(X_Z));
+        }
+        else {
+          SEND_STRING(KEY_SHIFT_LCTL_ACTION(X_Z));
+        }
+      }
+      break;
 
     case CUT:
       if (record->event.pressed) {
