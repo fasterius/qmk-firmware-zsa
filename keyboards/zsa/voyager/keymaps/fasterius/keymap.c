@@ -89,10 +89,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
   [_NAVIGATION] = LAYOUT_voyager(
-    XXXXXXX  , LED_LEVEL, RGB_VAD  , RGB_VAI  , RGB_TOG  , XXXXXXX  ,           XXXXXXX  , XXXXXXX  , XXXXXXX   , XXXXXXX  , XXXXXXX   , QK_BOOT  ,
-    XXXXXXX  , XXXXXXX  , VOL_DOWN , VOL_UP   , MUTE     , XXXXXXX  ,           KC_HOME  , KC_PGDN  , PAGE_UP   , KC_END   , XXXXXXX   , MAC_AA   ,
-    SEL_ALL  , LCTL_STOP, LALT_PREV, LGUI_NEXT, LSFT_PLAY, TOGL_LANG,           KC_LEFT  , KC_DOWN  , KC_UP     , KC_RIGHT , MAC_OSLH  , MAC_ADIA ,
-    REDO     , UNDO     , CUT      , COPY     , PASTE    , KC_F19   ,           XXXXXXX  , XXXXXXX  , XXXXXXX   , XXXXXXX  , XXXXXXX   , XXXXXXX  ,
+    XXXXXXX  , LED_LEVEL, RGB_VAD  , RGB_VAI  , RGB_TOG  , XXXXXXX  ,           XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , QK_BOOT  ,
+    XXXXXXX  , XXXXXXX  , VOL_DOWN , VOL_UP   , MUTE     , XXXXXXX  ,           KC_HOME  , KC_PGDN  , PAGE_UP  , KC_END   , XXXXXXX  , MAC_AA   ,
+    SEL_ALL  , LCTL_STOP, LALT_PREV, LGUI_NEXT, LSFT_PLAY, TOGL_LANG,           KC_LEFT  , KC_DOWN  , KC_UP    , KC_RIGHT , MAC_OSLH , MAC_ADIA ,
+    REDO     , UNDO     , CUT      , COPY     , PASTE    , KC_F19   ,           XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  ,
                                                 _______  , _______  ,           _______  , _______
   ),
 
