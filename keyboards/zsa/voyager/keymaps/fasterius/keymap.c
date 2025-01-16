@@ -20,6 +20,15 @@ enum custom_keycodes {
   PASTE,
 };
 
+// Define custom layer names
+enum custom_layers {
+    _MAIN,
+    _SYMBOLS,
+    _NAVIGATION,
+    _GAMING,
+    _SWEDISH,
+};
+
 // Aliases needed for OS-aware macros
 #define GENERAL_MODIFIER_KEY_DELAY_MS 20
 #define GENERAL_KEY_ACTION_DELAY_MS 50
@@ -39,10 +48,10 @@ enum custom_keycodes {
 #define RGUI_K MT(MOD_RGUI, KC_K)
 #define RALT_L MT(MOD_RALT, KC_L)
 #define RCTL_COLN MT(MOD_RCTL, KC_0) // KC_0 is a placeholder
-#define L2_SPACE LT(2, KC_SPACE)
+#define NAV_SPACE LT(_NAVIGATION, KC_SPACE)
 #define MEH_TAB MEH_T(KC_TAB)
 #define MEH_BSPC MEH_T(KC_BSPC)
-#define L1_ENTER LT(1, KC_ENTER)
+#define SYM_ENTER LT(_SYMBOLS, KC_ENTER)
 
 // Navigation / media / macro layer aliases
 #define VOL_UP KC_AUDIO_VOL_UP
@@ -60,15 +69,6 @@ enum custom_keycodes {
 // Swedish layer aliases
 #define RCTL_OSLH MT(MOD_RCTL, SE_OSLH)
 
-// Define custom layer names
-enum custom_layers {
-    _MAIN,
-    _SYMBOLS,
-    _NAVIGATION,
-    _GAMING,
-    _SWEDISH,
-};
-
 // Keymap
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -77,7 +77,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_DEL   , KC_Q     , KC_W     , KC_E     , KC_R     , KC_T     ,           KC_Y     , KC_U     , KC_I     , KC_O     , KC_P     , KC_BSLS  ,
     KC_ESC   , LCTL_A   , LALT_S   , LGUI_D   , LSFT_F   , KC_G     ,           KC_H     , RSFT_J   , RGUI_K   , RALT_L   , RCTL_COLN, KC_QUOTE ,
     KC_CAPS  , KC_Z     , KC_X     , KC_C     , KC_V     , KC_B     ,           KC_N     , KC_M     , KC_COMMA , KC_DOT   , KC_SLASH , CW_TOGG  ,
-                                               L2_SPACE  , MEH_TAB  ,           MEH_BSPC , L1_ENTER
+                                               NAV_SPACE , MEH_TAB  ,           MEH_BSPC , SYM_ENTER
   ),
 
   [_SYMBOLS] = LAYOUT_voyager(
@@ -118,8 +118,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 const uint16_t PROGMEM combo0[] = { KC_EQUAL, KC_MINUS, COMBO_END};
 const uint16_t PROGMEM combo1[] = { KC_G, KC_H, COMBO_END};
 combo_t key_combos[COMBO_COUNT] = {
-    COMBO(combo0, TG(3)), // Toggle gaming layer
-    COMBO(combo1, TG(4)), // Toggle Swedish layer
+    COMBO(combo0, TG(_GAMING)),
+    COMBO(combo1, TG(_SWEDISH)),
 };
 
 // Key-specific tapping terms
@@ -134,35 +134,44 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     }
 }
 
-// RGB colours
+// RGB colour configuration
 extern rgb_config_t rgb_matrix_config;
 
 void keyboard_post_init_user(void) {
   rgb_matrix_enable();
 }
 
+// HSV (hue, saturation, value) colours
+#define WHITE {129, 102, 255}
+#define GREEN { 74, 241, 225}
+#define BLUE  {148, 255, 147}
+
+// Array for HSV layer layout
 const uint8_t PROGMEM ledmap[][RGB_MATRIX_LED_COUNT][3] = {
-    [0] = { {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255} },
+    [_MAIN] =       { WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE },
 
-    [1] = { {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255} },
+    [_SYMBOLS] =    { WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE },
 
-    [2] = { {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255}, {129,102,255} },
+    [_NAVIGATION] = { WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE },
 
-    [3] = { {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225}, {74,241,225} },
+    [_GAMING] =     { GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN, GREEN },
 
-    [4] = { {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147}, {148,255,147} },
-
+    [_SWEDISH] =    { BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE, BLUE },
 };
 
+// Function to set layer RGB colours
 void set_layer_color(int layer) {
   for (int i = 0; i < RGB_MATRIX_LED_COUNT; i++) {
+    // Read values from HSV array
     HSV hsv = {
       .h = pgm_read_byte(&ledmap[layer][i][0]),
       .s = pgm_read_byte(&ledmap[layer][i][1]),
       .v = pgm_read_byte(&ledmap[layer][i][2]),
     };
+    // Disable RGB if HSV is zero
     if (!hsv.h && !hsv.s && !hsv.v) {
         rgb_matrix_set_color( i, 0, 0, 0 );
+    // Convert HSV to RGB and set the LED colours
     } else {
         RGB rgb = hsv_to_rgb( hsv );
         float f = (float)rgb_matrix_config.hsv.v / UINT8_MAX;
@@ -172,27 +181,33 @@ void set_layer_color(int layer) {
 }
 
 bool rgb_matrix_indicators_user(void) {
+  // Check for external processes in control of RGB
   if (rawhid_state.rgb_control) {
-      return false;
+    return false;
   }
-  if (keyboard_config.disable_layer_led) { return false; }
+  // Check if layer LEDs are disabled
+  if (keyboard_config.disable_layer_led) {
+    return false;
+  }
+  // Set layer LED colours
   switch (biton32(layer_state)) {
-    case 0:
-      set_layer_color(0);
+    case _MAIN:
+      set_layer_color(_MAIN);
       break;
-    case 1:
-      set_layer_color(1);
+    case _SYMBOLS:
+      set_layer_color(_SYMBOLS);
       break;
-    case 2:
-      set_layer_color(2);
+    case _NAVIGATION:
+      set_layer_color(_NAVIGATION);
       break;
-    case 3:
-      set_layer_color(3);
+    case _GAMING:
+      set_layer_color(_GAMING);
       break;
-    case 4:
-      set_layer_color(4);
+    case _SWEDISH:
+      set_layer_color(_SWEDISH);
       break;
-   default:
+  default:
+    // No colours
     if (rgb_matrix_get_flags() == LED_FLAG_NONE)
       rgb_matrix_set_color_all(0, 0, 0);
     break;
@@ -200,33 +215,38 @@ bool rgb_matrix_indicators_user(void) {
   return true;
 }
 
+// Handle custom key press behaviours
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-
-  // Save detected OS for OS-specific macros
-  os_variant_t current_os = detected_host_os();
 
   // Save modifiers and check if Shift is held for RCTL_COLN
   const uint8_t saved_mods = get_mods();
   const bool shifted = (saved_mods | get_oneshot_mods()) & MOD_MASK_SHIFT;
 
+  // Save detected OS for OS-specific macros
+  os_variant_t current_os = detected_host_os();
+
   switch (keycode) {
 
     // General macros
+
     case MAC_AA: // Type `å` on MacOS
       if (record->event.pressed) {
         SEND_STRING(SS_LALT(SS_TAP(X_A)));
       }
       break;
+
     case MAC_ADIA: // Type `ä` on MacOS
       if (record->event.pressed) {
         SEND_STRING(SS_LALT(SS_TAP(X_U)) SS_DELAY(100) SS_TAP(X_A));
       }
       break;
+
     case MAC_OSLH: // Type `ö` on MacOS
       if (record->event.pressed) {
         SEND_STRING(SS_LALT(SS_TAP(X_U)) SS_DELAY(100) SS_TAP(X_O));
       }
       break;
+
     case RCTL_COLN: // RCTL_COLN: RCTL on hold, COLN (:) on tap and SCLN (;) on shifted tap
       if (record->tap.count) {
         if (record->event.pressed) {
@@ -243,7 +263,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       break;  // Continue default handling for Ctrl on hold
 
     // OS-specific macros
-    case TOGL_LANG: // [Ctrl/GUI] + Space to switch input language
+
+    case TOGL_LANG: // [Ctrl/GUI] + Space to toggle input language
       if (record->event.pressed) {
         if (current_os == OS_MACOS || current_os == OS_IOS) {
           SEND_STRING(SS_LCTL(SS_TAP(X_SPACE)));
@@ -252,7 +273,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
       }
       break;
-    case SEL_ALL:
+
+    case SEL_ALL: // Select all
       if (record->event.pressed) {
         if (current_os == OS_MACOS || current_os == OS_IOS) {
           SEND_STRING(KEY_LGUI_ACTION(X_A));
@@ -262,16 +284,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
       }
       break;
-    /*case REDO:*/
-    /*  if (record->event.pressed) {*/
-    /*    if (current_os == OS_MACOS || current_os == OS_IOS) {*/
-    /*      SEND_STRING(KEY_LGUI_ACTION(X_Z));*/
-    /*    }*/
-    /*    else {*/
-    /*      SEND_STRING(KEY_LCTL_ACTION(X_Z));*/
-    /*    }*/
-    /*  }*/
-      break;
+
     case UNDO:
       if (record->event.pressed) {
         if (current_os == OS_MACOS || current_os == OS_IOS) {
@@ -282,6 +295,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
       }
       break;
+
+    /*case REDO:*/
+    /*  if (record->event.pressed) {*/
+    /*    if (current_os == OS_MACOS || current_os == OS_IOS) {*/
+    /*      SEND_STRING(KEY_LGUI_ACTION(X_Z));*/
+    /*    }*/
+    /*    else {*/
+    /*      SEND_STRING(KEY_LCTL_ACTION(X_Z));*/
+    /*    }*/
+    /*  }*/
+    /*  break;*/
+
     case CUT:
       if (record->event.pressed) {
         if (current_os == OS_MACOS || current_os == OS_IOS) {
@@ -292,6 +317,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
       }
       break;
+
     case COPY:
       if (record->event.pressed) {
         if (current_os == OS_MACOS || current_os == OS_IOS) {
@@ -302,6 +328,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
       }
       break;
+
     case PASTE:
       if (record->event.pressed) {
         if (current_os == OS_MACOS || current_os == OS_IOS) {
