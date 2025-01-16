@@ -24,12 +24,9 @@ enum custom_keycodes {
 #define GENERAL_MODIFIER_KEY_DELAY_MS 20
 #define GENERAL_KEY_ACTION_DELAY_MS 50
 #define KEY_MODIFIER_ACTION(keycode, modifier) \
-    SS_DOWN(modifier) \
-    SS_DELAY(GENERAL_MODIFIER_KEY_DELAY_MS) \
-    SS_TAP(keycode) \
-    SS_DELAY(GENERAL_KEY_ACTION_DELAY_MS) \
-    SS_UP(modifier) \
-    SS_DELAY(GENERAL_MODIFIER_KEY_DELAY_MS)
+    SS_DOWN(modifier) SS_DELAY(GENERAL_MODIFIER_KEY_DELAY_MS) \
+    SS_TAP(keycode) SS_DELAY(GENERAL_KEY_ACTION_DELAY_MS) \
+    SS_UP(modifier) SS_DELAY(GENERAL_MODIFIER_KEY_DELAY_MS)
 #define KEY_LGUI_ACTION(keycode) KEY_MODIFIER_ACTION(keycode, X_LGUI)
 #define KEY_LCTL_ACTION(keycode) KEY_MODIFIER_ACTION(keycode, X_LCTL)
 
@@ -214,27 +211,41 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
   switch (keycode) {
 
-    // Macros
+    // General macros
     case CTL_SPC: // Ctrl + Space to switch input language on MacOS
-    if (record->event.pressed) {
-      SEND_STRING(SS_LCTL(SS_TAP(X_SPACE)));
-    }
-    break;
+      if (record->event.pressed) {
+        SEND_STRING(SS_LCTL(SS_TAP(X_SPACE)));
+      }
+      break;
     case MAC_AA: // Type `å` on MacOS
-    if (record->event.pressed) {
-      SEND_STRING(SS_LALT(SS_TAP(X_A)));
-    }
-    break;
+      if (record->event.pressed) {
+        SEND_STRING(SS_LALT(SS_TAP(X_A)));
+      }
+      break;
     case MAC_ADIA: // Type `ä` on MacOS
-    if (record->event.pressed) {
-      SEND_STRING(SS_LALT(SS_TAP(X_U)) SS_DELAY(100) SS_TAP(X_A));
-    }
-    break;
+      if (record->event.pressed) {
+        SEND_STRING(SS_LALT(SS_TAP(X_U)) SS_DELAY(100) SS_TAP(X_A));
+      }
+      break;
     case MAC_OSLH: // Type `ö` on MacOS
-    if (record->event.pressed) {
-      SEND_STRING(SS_LALT(SS_TAP(X_U)) SS_DELAY(100) SS_TAP(X_O));
-    }
-    break;
+      if (record->event.pressed) {
+        SEND_STRING(SS_LALT(SS_TAP(X_U)) SS_DELAY(100) SS_TAP(X_O));
+      }
+      break;
+    case RCTL_COLN: // RCTL_COLN: RCTL on hold, COLN (:) on tap and SCLN (;) on shifted tap
+      if (record->tap.count) {
+        if (record->event.pressed) {
+          // Clear Shift from modifiers so that the correct keycode can be sent
+          del_oneshot_mods(MOD_MASK_SHIFT);
+          unregister_mods(MOD_MASK_SHIFT);
+          // Tap the applicable key depending on Shift status
+          tap_code16(shifted ? KC_SCLN : KC_COLN);
+          // Restore the saved mods
+          set_mods(saved_mods);
+        }
+        return false;  // Skip default handling for KC_0 on tap
+      }
+      break;  // Continue default handling for Ctrl on hold
 
     // OS-specific macros
     case SEL_ALL:
@@ -249,7 +260,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       break;
     /*case REDO:*/
     /*  if (record->event.pressed) {*/
-    /*    os_variant_t current_os = detected_host_os();*/
     /*    if (current_os == OS_MACOS || current_os == OS_IOS) {*/
     /*      SEND_STRING(KEY_LGUI_ACTION(X_Z));*/
     /*    }*/
@@ -298,22 +308,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
       }
       break;
-
-    // RCTL_COLN: RCTL on hold, COLN (:) on tap and SCLN (;) on shifted tap
-    case RCTL_COLN:
-      if (record->tap.count) {  // On tap
-        if (record->event.pressed) {  // On press
-          // Clear Shift from modifiers so that the correct keycode can be sent
-          del_oneshot_mods(MOD_MASK_SHIFT);
-          unregister_mods(MOD_MASK_SHIFT);
-          // Tap the applicable key depending on Shift status
-          tap_code16(shifted ? KC_SCLN : KC_COLN);
-          // Restore the saved mods
-          set_mods(saved_mods);
-        }
-        return false;  // Skip default handling for KC_0 on tap
-      }
-      break;  // Continue default handling for Ctrl on hold
 
   }
   return true;
