@@ -8,7 +8,7 @@
 
 // Macros
 enum custom_keycodes {
-  CTL_SPC = ML_SAFE_RANGE,
+  TOGL_LANG = ML_SAFE_RANGE,
   MAC_AA,
   MAC_OSLH,
   MAC_ADIA,
@@ -91,7 +91,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_NAVIGATION] = LAYOUT_voyager(
     XXXXXXX  , LED_LEVEL, RGB_VAD  , RGB_VAI  , RGB_TOG  , XXXXXXX  ,           XXXXXXX  , XXXXXXX  , XXXXXXX   , XXXXXXX  , XXXXXXX   , QK_BOOT  ,
     XXXXXXX  , XXXXXXX  , VOL_DOWN , VOL_UP   , MUTE     , XXXXXXX  ,           KC_HOME  , KC_PGDN  , PAGE_UP   , KC_END   , XXXXXXX   , MAC_AA   ,
-    SEL_ALL  , LCTL_STOP, LALT_PREV, LGUI_NEXT, LSFT_PLAY, CTL_SPC  ,           KC_LEFT  , KC_DOWN  , KC_UP     , KC_RIGHT , MAC_OSLH  , MAC_ADIA ,
+    SEL_ALL  , LCTL_STOP, LALT_PREV, LGUI_NEXT, LSFT_PLAY, TOGL_LANG,           KC_LEFT  , KC_DOWN  , KC_UP     , KC_RIGHT , MAC_OSLH  , MAC_ADIA ,
     REDO     , UNDO     , CUT      , COPY     , PASTE    , KC_F19   ,           XXXXXXX  , XXXXXXX  , XXXXXXX   , XXXXXXX  , XXXXXXX   , XXXXXXX  ,
                                                 _______  , _______  ,           _______  , _______
   ),
@@ -212,11 +212,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
 
     // General macros
-    case CTL_SPC: // Ctrl + Space to switch input language on MacOS
-      if (record->event.pressed) {
-        SEND_STRING(SS_LCTL(SS_TAP(X_SPACE)));
-      }
-      break;
     case MAC_AA: // Type `å` on MacOS
       if (record->event.pressed) {
         SEND_STRING(SS_LALT(SS_TAP(X_A)));
@@ -248,6 +243,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       break;  // Continue default handling for Ctrl on hold
 
     // OS-specific macros
+    case TOGL_LANG: // [Ctrl/GUI] + Space to switch input language
+      if (record->event.pressed) {
+        if (current_os == OS_MACOS || current_os == OS_IOS) {
+          SEND_STRING(SS_LCTL(SS_TAP(X_SPACE)));
+        } else {
+          SEND_STRING(SS_LGUI(SS_TAP(X_SPACE)));
+        }
+      }
+      break;
     case SEL_ALL:
       if (record->event.pressed) {
         if (current_os == OS_MACOS || current_os == OS_IOS) {
