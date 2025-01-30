@@ -125,7 +125,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 // Combos
 const uint16_t PROGMEM combo0[] = { KC_EQUAL, KC_MINUS, COMBO_END};
-const uint16_t PROGMEM combo1[] = { KC_G, KC_H, COMBO_END};
+const uint16_t PROGMEM combo1[] = { KC_ESC, KC_QUOTE, COMBO_END};
 combo_t key_combos[COMBO_COUNT] = {
     COMBO(combo0, TG(_GAMING)),
     COMBO(combo1, TG(_SWEDISH)),
